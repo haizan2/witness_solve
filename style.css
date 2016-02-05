@@ -1,0 +1,52 @@
+.row.content {
+    height: 1000px;
+}
+
+.btn-circle {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 14px 0;
+    border-radius: 25px;
+    margin-bottom: 4px;
+}
+
+.ctrl-shape {
+    stroke: black;
+    stroke-width: 4px;
+    fill: #fff;
+}
+
+.constr-active, .constr-active:hover {
+    background: #d4d4d4;
+}
+
+.color-ctrl:hover {
+    stroke: black;
+    stroke-width: 2px;
+}
+
+rect.selected {
+    stroke: black;
+    stroke-width: 3px;
+}
+
+input.color {
+    width: 25px;
+    height: 50px;
+    position: relative;
+    bottom: 10px;
+}
+
+.sidenav {
+    background-color: #f1f1f1;
+    height: 100%;
+    width:330px;
+}
+
+body {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    cursor: default;
+}

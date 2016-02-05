@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Witness Puzzle Solver</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"-->
+  <link rel="stylesheet" href="style.css">
+  <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row content">
+      <div class="col-sm-2 sidenav">
+        <h3>Settings</h3>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">Grid Settings</h4>
+            </div>
+            <div class="panel-body">
+              <p>Grid Size</p>
+              <form class="form-inline">
+                <select name="width"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select>&nbsp;x
+                <select name="height"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select>
+                <button type="button" class="btn btn-primary btn-sm">Apply</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">Color</h4>
+            </div>
+            <div class="panel-body">
+              <svg width="166" height="56">
+                <rect class="color-ctrl" x="3" y="3" width="22" height="50" fill="#fff"/>
+                <rect class="color-ctrl" x="23" y="3" width="22" height="50" fill="#000"/>
+                <rect class="color-ctrl" x="43" y="3" width="22" height="50" fill="#f00"/>
+                <rect class="color-ctrl" x="63" y="3" width="22" height="50" fill="#0f0"/>
+                <rect class="color-ctrl" x="83" y="3" width="22" height="50" fill="#00f"/>
+                <rect class="color-ctrl" x="103" y="3" width="22" height="50" fill="#0ff"/>
+                <rect class="color-ctrl" x="123" y="3" width="22" height="50" fill="#f0f"/>
+                <rect class="color-ctrl" x="143" y="3" width="20" height="50" fill="#ff0"/>
+                <rect x="3" y="3" width="160" height="50" fill="none" stroke="black" stroke-width="1px"/>
+              </svg>
+              <input type="color" class="color"/>
+              <div class="btn-group">
+                <a href="#" class="btn btn-default">Tint</a>
+                <a href="#" class="btn btn-default">Grid</a>
+                <a href="#" class="btn btn-default">Puzzle Background</a>
+                <a href="#" class="btn btn-default">Border Background</a>
+                <a href="#" class="btn btn-default">Solve Path</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">Cell Constraints</h4>
+            </div>
+            <div class="panel-body">
+              <button type="button" class="btn btn-default btn-circle constr-btn"><svg width="20" height="20" viewBox="-50 -50 100 100"><use class="ctrl-shape" xlink:href="#constraint-square"></svg></button>
+              <button type="button" class="btn btn-default btn-circle constr-btn"><svg width="20" height="20" viewBox="-50 -50 100 100"><use class="ctrl-shape" xlink:href="#constraint-error"></svg></button>
+              <button type="button" class="btn btn-default btn-circle constr-btn"><svg width="20" height="20" viewBox="-50 -50 100 100"><use class="ctrl-shape" xlink:href="#tetris-display"></svg></button>
+              <button type="button" class="btn btn-default btn-circle constr-btn"><svg width="20" height="20" viewBox="-50 -50 100 100"><use class="ctrl-shape" xlink:href="#constraint-star"></svg></button>
+              <button type="button" class="btn btn-default btn-circle constr-btn"><svg width="20" height="20" viewBox="-50 -50 100 100"><use class="ctrl-shape" xlink:href="#triangle-display"></svg></button>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">Edges and Nodes</h4>
+            </div>
+            <div class="panel-body">Edge and Node settings go here.</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-sm-9">
+        <h3>The Witness Puzzle Solver</h3>
+        <hr>
+
+        <svg id="svg" width="800" height="800">
+          <defs>
+            <g id="constraint-square">
+              <rect x="-50" y="-50" width="100" height="100" rx="25" ry="25"/>
+            </g>
+            <g id="constraint-star">
+              <polygon points="50,0 33.2597,13.7766 35.3553,35.3553 13.7766,33.2597 0.0000,50 -13.7766,33.2597 -35.3553,35.3553 -33.2597,13.7766 -50,0.0000 -33.2597,-13.7766 -35.3553,-35.3553 -13.7766,-33.2597 -0.0000,-50 13.7766,-33.2597 35.3553,-35.3553 33.2597,-13.7766"/>
+            </g>
+            <g id="constraint-error">
+              <polygon points="7,-40 8.4,-4.8497 38.1410,13.9378 31.1410,26.0622 0,8.3138 -31.9378,26.0622 -38.1410,13.9378 -8.4,-4.8497 -7,-40"/>
+            </g>
+            <g id="triangle-display">
+              <polygon points="0,-40 -34.641,20 34.641,20" fill="#F9BA48" stroke="none"/>
+            </g>
+            <g id="tetris-display">
+              <rect x="2.5" y="-15" width="30" height="30"/>
+              <rect x="2.5" y="-50" width="30" height="30"/>
+              <rect x="2.5" y="20" width="30" height="30"/>
+              <rect x="-32.5" y="-50" width="30" height="30"/>
+            </g>
+            <filter id="colorTint"><feColorMatrix in="SourceGraphic" type="matrix"
+              values="1 0 0 0 0
+                      0 1 0 0 0
+                      0 0 1 0 0
+                      0 0 0 1 0"/>
+            </filter>
+          </defs>
+          <g id="image" filter="url(#colorTint)">
+            <g id="background"></g>
+            <g id="grid"></g>
+            <g id="constraints"></g>
+            <g id="solution"></g>
+            <g id="selectors"></g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
