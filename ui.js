@@ -50,6 +50,7 @@ function updateVisualGrid() {
 
     // actually render the grid
     $('#grid').html($('#grid').html());
+    $('#selectors').html($('#selectors').html());
 }
 
 function addEdgesToGrid() {
@@ -61,8 +62,9 @@ function addEdgesToGrid() {
             continue;
         var n = e.nodes;
         var line = $('<g/>').attr('class', 'grid edge');
-        var sel = $('<rect/>').attr('class', 'selector edge-select');
+        var sel;
         if(n[0].x != n[1].x && n[0].y != n[1].y) { // diagonal
+            sel = $('<g/>').attr('class', 'selector edge-select');
             if(e.type == EDGE_TYPE.BROKEN) {
                 $('<rect/>')
                     .attr('class', 'grid edge')
@@ -89,10 +91,25 @@ function addEdgesToGrid() {
             }
             if(n[0].x < n[1].x) { // major diagonal
                 line.attr('transform', 'translate(' + nodeX(n[0].x) + ', ' + nodeY(n[0].y) + ') rotate(45)');
+                sel.attr('transform', 'translate(' + nodeX(n[0].x) + ', ' + nodeY(n[0].y) + ') rotate(45)');
             } else {
                 line.attr('transform', 'translate(' + nodeX(n[0].x) + ', ' + nodeY(n[0].y) + ') rotate(135) ');
+                sel.attr('transform', 'translate(' + nodeX(n[0].x) + ', ' + nodeY(n[0].y) + ') rotate(135) ');
             }
+            $('<rect/>')
+                .attr('class', 'selector edge-select')
+                .attr('x', radius)
+                .attr('y', -radius)
+                .attr('height', 2*radius)
+                .attr('width', spacing_diag-2*radius)
+                .appendTo(sel);
         } else if(n[0].x != n[1].x) { // horizontal
+            sel = $('<rect/>')
+                .attr('class', 'selector edge-select')
+                .attr('x', nodeX(n[0].x)+radius)
+                .attr('y', nodeY(n[0].y)-radius)
+                .attr('height', 2*radius)
+                .attr('width', spacing-2*radius);
             if(e.type == EDGE_TYPE.BROKEN) {
                 $('<rect/>')
                     .attr('class', 'grid edge')
@@ -118,6 +135,12 @@ function addEdgesToGrid() {
                     .appendTo(line);
             }
         } else { // vertical
+            sel = $('<rect/>')
+                .attr('class', 'selector edge-select')
+                .attr('x', nodeX(n[0].x)-radius)
+                .attr('y', nodeY(n[0].y)+radius)
+                .attr('width', 2*radius)
+                .attr('height', spacing-2*radius);
             if(e.type == EDGE_TYPE.BROKEN) {
                 $('<rect/>')
                     .attr('class', 'grid edge')
@@ -144,6 +167,7 @@ function addEdgesToGrid() {
             }
         }
         line.appendTo(grid);
+        sel.appendTo(select);
         if(e.type == EDGE_TYPE.START) {
             getStartPoint((nodeX(n[0].x) + nodeX(n[1].x))/2,
                           (nodeY(n[0].y) + nodeY(n[1].y))/2)
@@ -165,6 +189,12 @@ function addNodesToGrid() {
     for(var x = 0; x < puzzle.width; x++) {
         for(var y = 0; y < puzzle.height; y++) {
             var n = puzzle.nodes[x][y];
+            var sel = $('<rect/>')
+                .attr('class', 'selector node-select')
+                .attr('x', nodeX(x)-radius)
+                .attr('y', nodeY(y)-radius)
+                .attr('width', 2*radius)
+                .attr('height', 2*radius);
             if(n.type != NODE_TYPE.NONE) {
                 var node = $('<circle/>')
                     .attr('class', 'grid node')
@@ -179,8 +209,10 @@ function addNodesToGrid() {
                 node.appendTo(grid);
                 if(n.type == NODE_TYPE.EXIT)
                     getExitEdge(nodeX(x), nodeY(y), n.len, n.angle).appendTo(grid);
+            } else {
+                sel.addClass('none-select');
             }
-
+            sel.appendTo(select);
         }
     }
 }
