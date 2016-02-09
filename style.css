@@ -3,34 +3,61 @@
 }
 
 .btn-circle {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     text-align: center;
-    padding: 14px 0;
-    border-radius: 25px;
+    vertical-align: middle;
+    padding: 14px 10px;
+    border-radius: 30px;
     margin-bottom: 4px;
 }
 
 .ctrl-shape {
     stroke: black;
     stroke-width: 4px;
-    fill: #fff;
 }
 
 .constr-active, .constr-active:hover {
     background: #d4d4d4;
 }
 
-.selector, .sel-active {
+.selector {
     fill: rgba(255, 255, 0, 0);
+}
+
+.sel-active {
+    fill: rgba(255, 255, 0, 0);
+    pointer-events: all;
+    cursor: pointer;
 }
 
 .selector.sel-active:hover {
     fill: rgba(255, 255, 0, 0.5);
 }
 
-.color-ctrl:hover {
-    stroke: black;
+.selector.sel-active.start-select:hover {
+    fill: rgba(255, 255, 0, 0);
+}
+
+.sol-line {
+    stroke-linecap: round;
+}
+
+.solution {
+    stroke: white;
+    fill: white;
+}
+
+.color-select {
+    fill: none;
+    stroke: none;
+    pointer-events: all;
+}
+
+.color-select:hover {
+    fill: none;
+    pointer-events: all;
+    stroke: #000000;
     stroke-width: 2px;
 }
 

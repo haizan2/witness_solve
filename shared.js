@@ -12,6 +12,7 @@ var CELL_TYPE = {
     'STAR': 2,
     'ERROR': 3,
     'TETRIS': 4,
+    'TRIANGLE': 5,
     'DIAGONAL_MAJOR': 5,
     'DIAGONAL_MINOR': 6
 }
@@ -23,6 +24,16 @@ var EDGE_TYPE = {
     'REQUIRED': 3,
     'EXIT': 4,
     'BROKEN': 5
+}
+
+var CONSTRAINT_TYPE = {
+    'NONE': 0,
+    'SQUARE': 1,
+    'STAR': 2,
+    'ERROR': 3,
+    'TETRIS': 4,
+    'TRIANGLE': 5,
+    'HEXAGON': 6
 }
 
 // puzzle definition
@@ -56,6 +67,11 @@ function initPuzzle(puzzle, width, height) {
     initNodes(puzzle);
     initCells(puzzle);
     initEdges(puzzle);
+    updateMetrics();
+    puzzle.nodes[0][height-1].type = NODE_TYPE.START;
+    puzzle.nodes[width-1][0].type = NODE_TYPE.EXIT;
+    puzzle.nodes[width-1][0].angle = -45;
+    puzzle.nodes[width-1][0].len = 2*radius;
 }
 
 function initNodes(puzzle) {
@@ -75,7 +91,7 @@ function initCells(puzzle) {
 
     for(var x = 0; x < puzzle.width - 1; x++) {
         for(var y = 0; y < puzzle.height - 1; y++) {
-            puzzle.cells[x][y] = {type: CELL_TYPE.NORMAL};
+            puzzle.cells[x][y] = {type: CELL_TYPE.NONE};
         }
     }
 }
